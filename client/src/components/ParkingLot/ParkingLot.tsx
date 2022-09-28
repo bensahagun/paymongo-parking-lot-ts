@@ -150,17 +150,13 @@ const ParkingLot = () => {
   return (
     <div className='gap-8 grid'>
       {data.map((slot, key) => (
-        <div key={key} className='border-gray-700 rounded border-solid border-2 p-8'>
+        <div className='border-gray-700 rounded border-solid border-2 p-8'>
           <h3 className='text-white text-3xl'>{slot.slotSize}</h3>
           <div className='mx-auto pt-6 gap-6  flex items-center justify-center'>
             {slot.slots.map((s) => (
               <div
-                key={s.slotNumber}
                 onClick={() => unParkVehicle(s.occupant)}
-                className={classnames(
-                  "cursor-pointer hover:bg-slate-700 relative w-1/12 rounded mb-8 border-gray-300 dark:border-gray-700 border-2 h-24 items-center flex justify-center",
-                  s.occupant ? "border-solid" : "border-dashed"
-                )}
+                className='relative w-1/12 rounded mb-8 border-gray-300 dark:border-gray-700 border-dashed border-2 h-24 items-center flex justify-center'
               >
                 <span
                   className={classnames("capitalize font-bold text-xl", s.occupant ? " text-white " : "text-green-400")}
