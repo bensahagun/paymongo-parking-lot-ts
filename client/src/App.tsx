@@ -16,7 +16,7 @@ function App() {
         );
       case 1:
         return (
-          <div className='w-screen'>
+          <div className='w-8/12'>
             <Unpark />
           </div>
         );

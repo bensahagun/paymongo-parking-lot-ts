@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#parking-lot > div:nth-child(n + 9):before {
+  content: "";
+  height: 3px;
+  width: 130%;
+  background: #fff;
+  position: absolute;
+  top: -50px;
+}
+
+#parking-lot > div:nth-child(n + 9) {
+  margin-top: 2rem;
+}
+
+#parking-lot > div:nth-child(16):before {
+  display: none;
+}
+
+#parking-lot > div:nth-child(17):before {
+  display: none;
+}
