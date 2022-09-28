@@ -12,12 +12,17 @@ type ParkingRates = {
   [key in SlotSize]: ParkingRate;
 };
 
-export class ParkingLotUtils{
-  
-  static getHoursDiff(startDate: number, endDate: number)  {
+export class ParkingLotUtils {
+  static validateTicket(ticket: Ticket, ticketHoursValid: number) {
+    if (!ticket.exitTimestamp) return true;
+    if (this.getHoursDiff(ticket.entryTimestamp, ticket.exitTimestamp) <= ticketHoursValid) return true;
+    return false;
+  }
+
+  static getHoursDiff(startDate: number, endDate: number) {
     const msInHour = 1000 * 60 * 60;
     return Math.ceil(Math.abs(endDate - startDate) / msInHour);
-  };
+  }
 
   static calculateFees(ticket: Ticket, rate: ParkingRate, exitTimeStamp: number) {
     const totalHours = this.getHoursDiff(ticket.entryTimestamp, exitTimeStamp);
@@ -29,10 +34,10 @@ export class ParkingLotUtils{
 
     return (
       rate.dailyRate * Math.floor(totalHours / dayInHours) +
-      rate.dailyRate * (totalHours % dayInHours) - ticket.paidAmount
+      rate.dailyRate * (totalHours % dayInHours) -
+      ticket.paidAmount
     );
   }
-
 }
 
 export class ParkingLot {
@@ -70,7 +75,7 @@ export class ParkingLot {
   parkVehicle(vehicle: Vehicle, entryPoint: EntryPoint) {
     const ticket = this.getTicket(vehicle.plateNum);
 
-    if (ticket && this.validateTicket(ticket)) {
+    if (ticket && ParkingLotUtils.validateTicket(ticket, this.ticketHoursValid)) {
       ticket.exitTimestamp = undefined;
       return ticket;
     }
@@ -83,7 +88,7 @@ export class ParkingLot {
     return newTicket;
   }
 
-  unpark(plateNum: string) {
+  unparkVehicle(plateNum: string) {
     const ticket = this.getTicket(plateNum);
     if (!ticket) throw Error("No record found.");
 
@@ -94,20 +99,9 @@ export class ParkingLot {
 
     return ticket;
   }
-  
-  unparkVehicle(ticket: Ticket) {
-    var fee = 40;
-    return fee;
-  }
 
-  getTicket(plateNum: string;) {
+  getTicket(plateNum: string) {
     return this.tickets.find((ticket) => ticket.vehicle.plateNum === plateNum) || false;
-  }
-
-  validateTicket(ticket: Ticket) {
-    if (!ticket.exitTimestamp) return true;
-    if (ParkingLotUtils.getHoursDiff(ticket.entryTimestamp, ticket.exitTimestamp) <= this.ticketHoursValid) return true;
-    return false;
   }
 
   getParkingSlot(size: VehicleType, entryPoint: EntryPoint) {
@@ -119,18 +113,19 @@ export class ParkingLot {
   }
 
   getActiveTickets() {
-    return this.tickets.filter(this.validateTicket);
+    return this.tickets.filter(ParkingLotUtils.validateTicket);
   }
 
-  getFees(ticket: Ticket){
-    const timestamp = Date.now();
-    const toPay = this.calculateAmount(timestamp) - this.paidAmount;
+  getMap() {
+    return Object.values(this.slots)
+      .flat()
+      .map((slot) => {
+        const ticket = this.tickets.find((ticket) => ticket.slot == slot);
 
-    this.paidAmount += toPay;
-    this.exitTimestamp = timestamp;
-
-    return toPay;
+        if (ticket && ParkingLotUtils.validateTicket(ticket, this.ticketHoursValid)) {
+          return { ...slot, occupantTicket: ticket };
+        }
+        return slot;
+      });
   }
-
-  getMap() {}
 }

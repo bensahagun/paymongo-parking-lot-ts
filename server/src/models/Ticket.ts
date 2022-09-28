@@ -4,7 +4,6 @@ import Vehicle from "./Vehicle";
 export default class Ticket {
   vehicle: Vehicle;
   slot: Slot;
-  hoursValid: number;
   paidAmount: number;
   entryTimestamp: number;
   exitTimestamp?: number;
@@ -14,6 +13,5 @@ export default class Ticket {
     this.slot = slot;
     this.paidAmount = 0;
     this.entryTimestamp = Date.now();
-    this.hoursValid = hoursValid;
   }
 }
