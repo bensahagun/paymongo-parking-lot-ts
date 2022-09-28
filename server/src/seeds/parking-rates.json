@@ -7,14 +7,14 @@
   },
   {
     "slotSize": 1,
-    "flatRate": 60,
-    "hourlyRate": 20,
+    "flatRate": 40,
+    "hourlyRate": 60,
     "dailyRate": 5000
   },
   {
     "slotSize": 2,
-    "flatRate": 120,
-    "hourlyRate": 20,
+    "flatRate": 40,
+    "hourlyRate": 100,
     "dailyRate": 5000
   }
 ]

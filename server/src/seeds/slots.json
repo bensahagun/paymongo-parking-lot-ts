@@ -18,5 +18,10 @@
     "slotNumber": 4,
     "slotSize": 2,
     "distances": [1, 1, 1]
+  },
+  {
+    "slotNumber": 5,
+    "slotSize": 2,
+    "distances": [2, 2, 1]
   }
 ]

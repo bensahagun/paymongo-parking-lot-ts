@@ -15,17 +15,18 @@ type ParkingRates = {
 export class ParkingLotUtils {
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
     if (!ticket.exitTimestamp) return true;
-    if (this.getHoursDiff(ticket.entryTimestamp, ticket.exitTimestamp) <= ticketHoursValid) return true;
+    if (ParkingLotUtils.getHoursDiff(ticket.exitTimestamp, Date.now()) <= ticketHoursValid) return true;
     return false;
   }
 
   static getHoursDiff(startDate: number, endDate: number) {
-    const msInHour = 1000 * 60 * 60;
+    // const msInHour = 1000 * 60 * 60;
+    const msInHour = 1000 * 1;
     return Math.ceil(Math.abs(endDate - startDate) / msInHour);
   }
 
   static calculateFees(ticket: Ticket, rate: ParkingRate, exitTimeStamp: number) {
-    const totalHours = this.getHoursDiff(ticket.entryTimestamp, exitTimeStamp);
+    const totalHours = ParkingLotUtils.getHoursDiff(ticket.entryTimestamp, exitTimeStamp);
     const dayInHours = 24;
 
     if (totalHours <= rate.flatRateHours) return rate.flatRate - ticket.paidAmount;
@@ -34,7 +35,7 @@ export class ParkingLotUtils {
 
     return (
       rate.dailyRate * Math.floor(totalHours / dayInHours) +
-      rate.dailyRate * (totalHours % dayInHours) -
+      rate.hourlyRate * (totalHours % dayInHours) -
       ticket.paidAmount
     );
   }
@@ -83,8 +84,8 @@ export class ParkingLot {
     const slot = this.getParkingSlot(vehicle.vehicleType, entryPoint);
     if (!slot) throw Error("No available slot");
 
-    const newTicket = new Ticket(vehicle, slot, this.ticketHoursValid);
-    this.tickets.push(newTicket);
+    const newTicket = new Ticket(vehicle, slot);
+    this.tickets.unshift(newTicket);
     return newTicket;
   }
 
@@ -97,7 +98,7 @@ export class ParkingLot {
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
 
-    return ticket;
+    return toPay;
   }
 
   getTicket(plateNum: string) {

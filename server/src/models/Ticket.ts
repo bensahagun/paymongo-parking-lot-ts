@@ -8,10 +8,11 @@ export default class Ticket {
   entryTimestamp: number;
   exitTimestamp?: number;
 
-  constructor(vehicle: Vehicle, slot: Slot, hoursValid = 1) {
+  constructor(vehicle: Vehicle, slot: Slot) {
     this.vehicle = vehicle;
     this.slot = slot;
     this.paidAmount = 0;
     this.entryTimestamp = Date.now();
+    this.exitTimestamp = undefined;
   }
 }
