@@ -1,0 +1,20 @@
+[
+  {
+    "slotSize": 0,
+    "flatRate": 40,
+    "hourlyRate": 20,
+    "dailyRate": 5000
+  },
+  {
+    "slotSize": 1,
+    "flatRate": 60,
+    "hourlyRate": 20,
+    "dailyRate": 5000
+  },
+  {
+    "slotSize": 2,
+    "flatRate": 120,
+    "hourlyRate": 20,
+    "dailyRate": 5000
+  }
+]

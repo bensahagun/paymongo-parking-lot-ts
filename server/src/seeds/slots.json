@@ -1,0 +1,22 @@
+[
+  {
+    "slotNumber": 1,
+    "slotSize": 0,
+    "distances": [1, 2, 3]
+  },
+  {
+    "slotNumber": 2,
+    "slotSize": 1,
+    "distances": [4, 3, 2]
+  },
+  {
+    "slotNumber": 3,
+    "slotSize": 2,
+    "distances": [3, 3, 5]
+  },
+  {
+    "slotNumber": 4,
+    "slotSize": 2,
+    "distances": [1, 1, 1]
+  }
+]
