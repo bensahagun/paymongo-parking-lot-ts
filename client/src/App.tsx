@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Entrance from "./components/Entrance/Entrance";
-import Unpark from "./components/Unpark/Unpark";
+import ParkingLot from "./components/ParkingLot/ParkingLot";
 import Tabs from "./components/Tabs/Tabs";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
       case 1:
         return (
           <div className='w-8/12'>
-            <Unpark />
+            <ParkingLot />
           </div>
         );
     }
