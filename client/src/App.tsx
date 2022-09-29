@@ -16,7 +16,7 @@ function App() {
         );
       case 1:
         return (
-          <div className='w-8/12'>
+          <div className='w-8/12 '>
             <ParkingLot />
           </div>
         );

@@ -1,28 +1,25 @@
-import axios from "axios";
-import React, { ChangeEvent, useState } from "react";
+import { useState } from "react";
+import { faker } from "@faker-js/faker";
+import { parkVehicle } from "../../services/api";
 
 const baseURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
 const Entrance = () => {
   const [vehicleType, setVehicleType] = useState(-1);
   const [entrance, setEntrance] = useState(-1);
-  const [plateText, setPlateText] = useState("");
+  const [plateNum, setPlateNum] = useState("");
 
-  const handleClick = () => {
-    if (!plateText || vehicleType < 0 || entrance < 0) {
+  const handleClick = async () => {
+    if (!plateNum || vehicleType < 0 || entrance < 0) {
       alert("All fields are required.");
       return false;
     }
 
-    axios
-      .post(baseURL + "/park", {
-        plateNum: plateText,
-        vehicleType: vehicleType,
-        entrance: entrance,
-      })
-      .then((res) => {
-        alert(res.data?.error || "Successfully parked.");
-      });
+    await parkVehicle(plateNum, vehicleType, entrance);
+  };
+
+  const generateRandomPlateNum = () => {
+    setPlateNum(faker.vehicle.vrm());
   };
 
   return (
@@ -30,15 +27,24 @@ const Entrance = () => {
       <div className=' border-slate-500 border-solid  border-2 p-8'>
         <div className='mb-6'>
           <label className='block mb-2 font-medium text-gray-900 dark:text-gray-300 text-2xl '>Plate Number</label>
-          <input
-            type='text'
-            id='plate-number'
-            className='bg-gray-50 border border-gray-300 text-gray-900 text-lg text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 uppercase'
-            placeholder='ABC 123'
-            value={plateText}
-            onChange={({ target }) => setPlateText(target.value.toUpperCase())}
-            maxLength={10}
-          />
+          <div className='flex gap-2 '>
+            <input
+              type='text'
+              id='plate-number'
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-lg text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 uppercase'
+              placeholder='ABC 123'
+              value={plateNum}
+              onChange={({ target }) => setPlateNum(target.value.toUpperCase())}
+              maxLength={10}
+            />
+            <button
+              type='button'
+              className=' text-white font-medium rounded  text-xl px-4 py-3 text-center border-1 border border-gray-600 '
+              onClick={() => generateRandomPlateNum()}
+            >
+              🚗
+            </button>
+          </div>
         </div>
         <div className='mb-6 relative'>
           <label className='block mb-2 text-xl font-medium text-gray-900 dark:text-gray-400'>Vehicle Type</label>

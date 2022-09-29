@@ -3,7 +3,6 @@ import ParkingRate from "./ParkingRate";
 import Slot from "./Slot";
 import Ticket from "./Ticket";
 import Vehicle from "./Vehicle";
-
 export class ParkingLotUtils {
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
     if (!ticket.exitTimestamp) return true;
@@ -13,7 +12,6 @@ export class ParkingLotUtils {
 
   static getHoursDiff(startDate: number, endDate: number) {
     const msInHour = 1000 * 60 * 60;
-    // const msInHour = 1000 * 1;
     return Math.ceil(Math.abs(endDate - startDate) / msInHour);
   }
 
