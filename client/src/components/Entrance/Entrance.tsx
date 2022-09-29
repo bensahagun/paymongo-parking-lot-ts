@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { ChangeEvent, useState } from "react";
 
-enum VehicleTypes {
-  "S" = 0,
-  "M" = 1,
-  "L" = 2,
-}
+const baseURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
 const Entrance = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [menuText, setMenuText] = useState("");
+  const [vehicleType, setVehicleType] = useState(-1);
+  const [entrance, setEntrance] = useState(-1);
   const [plateText, setPlateText] = useState("");
 
   const handleClick = () => {
-    if (!menuText) {
-      alert("Please select vehicle type.");
+    if (!plateText || vehicleType < 0 || entrance < 0) {
+      alert("All fields are required.");
       return false;
     }
 
-    if (!plateText) {
-      alert("Please input plate number.");
-      return false;
-    }
+    axios
+      .post(baseURL + "/park", {
+        plateNum: plateText,
+        vehicleType: vehicleType,
+        entrance: entrance,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
   };
-
-  console.log(Object.keys(VehicleTypes));
 
   return (
     <>
@@ -36,7 +36,7 @@ const Entrance = () => {
             className='bg-gray-50 border border-gray-300 text-gray-900 text-lg text-center rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 uppercase'
             placeholder='ABC 123'
             value={plateText}
-            onChange={({ target }) => setPlateText(target.value)}
+            onChange={({ target }) => setPlateText(target.value.toUpperCase())}
             maxLength={10}
           />
         </div>
@@ -45,14 +45,28 @@ const Entrance = () => {
           <select
             id='vehicleType'
             className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            onChange={({ target }) => setVehicleType(target.value as any)}
+            defaultValue={-1}
           >
-            <option selected>Select vehicle type</option>
+            <option value={-1}>Select vehicle type</option>
+            <option value={0}>Small</option>
+            <option value={1}>Medium</option>
+            <option value={2}>Large</option>
+          </select>
+        </div>
 
-            {Object.keys(VehicleTypes).map((t) => (
-              <option value={t} key={t}>
-                {t}
-              </option>
-            ))}
+        <div className='mb-6 relative'>
+          <label className='block mb-2 text-xl font-medium text-gray-900 dark:text-gray-400'>Entrance</label>
+          <select
+            id='entrance'
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            onChange={({ target }) => setEntrance(target.value as any)}
+            defaultValue={-1}
+          >
+            <option value={-1}>Select entrance</option>
+            <option value={0}>A</option>
+            <option value={1}>B</option>
+            <option value={2}>C</option>
           </select>
         </div>
 
