@@ -154,9 +154,8 @@ describe("Parking with reentry after 1 hour", () => {
   it("should compute correct charges after 5.5 hours", () => {
     const hoursInMSStay = hoursToMS(5.5);
     setTimeout(() => {
-      const exitTicket = parkingLot.unparkVehicle(vehicle);
-      expect(exitTicket).toBe(ticket);
-      expect(exitTicket.paidAmount).toBe(340); // uses slot #5 -> 40 + (100*3)
+      const { charge } = parkingLot.unparkVehicle(vehicle);
+      expect(charge).toBe(340); // uses slot #5 -> 40 + (100*3)
     }, hoursInMSStay);
     jest.advanceTimersByTime(hoursInMSStay);
   });
@@ -188,9 +187,8 @@ describe("Parking over 24 hours", () => {
     const rate = parkingLot.getParkingRate(ticket1.slot.slotSize);
 
     setTimeout(() => {
-      const exitTicket = parkingLot.unparkVehicle(vehicle1);
-      expect(exitTicket).toBe(ticket1);
-      expect(exitTicket.paidAmount).toBe(rate.dailyRate);
+      const { charge } = parkingLot.unparkVehicle(vehicle1);
+      expect(charge).toBe(rate.dailyRate);
     }, hoursToMS(24));
     jest.advanceTimersByTime(hoursToMS(24));
   });
@@ -201,9 +199,8 @@ describe("Parking over 24 hours", () => {
     const hoursInMSStay = hoursToMS(25);
 
     setTimeout(() => {
-      const exitTicket = parkingLot.unparkVehicle(vehicle1);
-      expect(exitTicket).toBe(ticket1);
-      expect(exitTicket.paidAmount).toBe(rate.dailyRate + rate.hourlyRate);
+      const { charge } = parkingLot.unparkVehicle(vehicle1);
+      expect(charge).toBe(rate.dailyRate + rate.hourlyRate);
     }, hoursInMSStay);
     jest.advanceTimersByTime(hoursInMSStay);
   });
@@ -214,9 +211,8 @@ describe("Parking over 24 hours", () => {
     const hoursInMSStay = hoursToMS(48);
 
     setTimeout(() => {
-      const exitTicket = parkingLot.unparkVehicle(vehicle2);
-      expect(exitTicket).toBe(ticket1);
-      expect(exitTicket.paidAmount).toBe(rate.dailyRate * 2);
+      const { charge } = parkingLot.unparkVehicle(vehicle2);
+      expect(charge).toBe(rate.dailyRate * 2);
     }, hoursInMSStay);
     jest.advanceTimersByTime(hoursInMSStay);
   });
@@ -237,6 +233,10 @@ describe("Parking with 2 cars and reentry", () => {
     expect(ticket1.vehicle).toBe(vehicle1);
   });
 
+  test("Should not park with same plateNumber", () => {
+    expect(() => parkingLot.parkVehicle(vehicle1, EntryPoint.B)).toThrowError();
+  });
+
   test("Should receive a valid ticket", () => {
     expect(ticket1.entryTimestamp).toBeLessThanOrEqual(Date.now());
     expect(ticket1.exitTimestamp).toBeFalsy();
@@ -252,7 +252,7 @@ describe("Parking with 2 cars and reentry", () => {
 
   test("should receive a valid ticket when unparking", () => {
     setTimeout(() => {
-      const exitTicket = parkingLot.unparkVehicle(vehicle1);
+      const { ticket: exitTicket } = parkingLot.unparkVehicle(vehicle1);
       expect(exitTicket).toBe(ticket1);
       expect(exitTicket.exitTimestamp).toBeGreaterThan(exitTicket.entryTimestamp);
     }, hoursToMS(1));

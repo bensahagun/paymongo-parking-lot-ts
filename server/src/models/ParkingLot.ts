@@ -92,8 +92,7 @@ export class ParkingLot {
     const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
-
-    return ticket;
+    return { ticket, charge: toPay };
   }
 
   getParkingRate(slotSize: SlotSize) {

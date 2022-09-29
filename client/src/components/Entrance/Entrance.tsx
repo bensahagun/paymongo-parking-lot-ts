@@ -2,8 +2,6 @@ import { useState } from "react";
 import { faker } from "@faker-js/faker";
 import { parkVehicle } from "../../services/api";
 
-const baseURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
-
 const Entrance = () => {
   const [vehicleType, setVehicleType] = useState(-1);
   const [entrance, setEntrance] = useState(-1);

@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from "react";
-import classnames from "classnames";
-import { getParkingMap } from "../../services/api";
+import cx from "classnames";
+import { getParkingMap, unparkVehicle } from "../../services/api";
 import { ParkingMap } from "../../types/parkingMap";
 import { SlotSize } from "../../types/enums";
 import { Spinner } from "./Spinner";
+import { Ticket } from "../../types/ticket";
 
 const ParkingLot = () => {
   const [parkingMap, setParkingMap] = useState<ParkingMap | null>(null);
 
+  const fetchParkingMap = async () => {
+    return getParkingMap().then((data) => setParkingMap(data.map));
+  };
+
   useEffect(() => {
-    getParkingMap().then((res) => setParkingMap(res.data.map));
+    fetchParkingMap();
   }, []);
+
+  const unParkVehicle = (ticket: Ticket) => {
+    if (!ticket || ticket.exitTimestamp) return;
+
+    const hoursStay = prompt("Time stayed:");
+    if (isNaN(Number(hoursStay))) return;
+
+    unparkVehicle(ticket, Number(hoursStay)).then((charge) => {
+      alert(charge);
+      fetchParkingMap();
+    });
+  };
 
   if (!parkingMap)
     return (
@@ -28,12 +45,14 @@ const ParkingLot = () => {
             {slots.map((s) => (
               <div
                 key={s.slotNum}
-                // onClick={() => unParkVehicle(s.)}
-                className='relative w-1/12 rounded mb-8 border-gray-300 dark:border-gray-700 border-dashed border-2 h-24 items-center flex justify-center  flex-col'
+                onClick={() => unParkVehicle(s.ticket)}
+                className={cx(
+                  "relative w-1/12 rounded mb-8 border-gray-300 dark:border-gray-700 border-dashed border-2 h-24 items-center flex justify-center flex-col",
+                  s.ticket ? "cursor-pointer dark:hover:bg-gray-600" : "",
+                  s.ticket?.exitTimestamp ? "border-red-700 dark:border-red-700" : ""
+                )}
               >
-                <span
-                  className={classnames("capitalize font-bold text-xl", s.ticket ? " text-white " : "text-green-400")}
-                >
+                <span className={cx("capitalize font-bold text-xl", s.ticket ? " text-white " : "text-green-400")}>
                   {s.ticket ? s.ticket.vehicle.plateNum : s.slotNum}
                 </span>
                 <small className='text-white text-sm block'>{JSON.stringify(s.distances)}</small>

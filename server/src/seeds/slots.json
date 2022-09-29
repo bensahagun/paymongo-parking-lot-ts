@@ -28,5 +28,15 @@
     "slotNum": 6,
     "slotSize": 1,
     "distances": [1, 2, 1]
+  },
+  {
+    "slotNum": 7,
+    "slotSize": 1,
+    "distances": [2, 1, 3]
+  },
+  {
+    "slotNum": 8,
+    "slotSize": 0,
+    "distances": [1, 1, 1]
   }
 ]
