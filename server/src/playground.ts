@@ -18,11 +18,11 @@ async function main() {
     let ticket = parkingLot.parkVehicle(zkx, EntryPoint.A);
 
     await delay(2000);
-    console.log(parkingLot.unparkVehicle("ZKX 571"), ticket);
+    console.log(parkingLot.unparkVehicle(zkx), ticket);
     await delay(800);
     console.log(parkingLot.parkVehicle(zkx, EntryPoint.A));
     await delay(1200);
-    console.log(parkingLot.unparkVehicle("ZKX 571"), ticket);
+    console.log(parkingLot.unparkVehicle(zkx), ticket);
     await delay(1500);
 
     const avi = new Vehicle("ZSP 382", VehicleType.M);
@@ -34,12 +34,12 @@ async function main() {
     ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
     console.log(ticket);
     await delay(5000);
-    console.log(parkingLot.unparkVehicle("ZKX 571"), ticket);
+    console.log(parkingLot.unparkVehicle(zkx), ticket);
     await delay(700);
     ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
     console.log(ticket);
     await delay(23100);
-    console.log(parkingLot.unparkVehicle("ZKX 571"), ticket);
+    console.log(parkingLot.unparkVehicle(zkx), ticket);
 
     // await delay(3500);
 

@@ -4,14 +4,6 @@ import Slot from "./Slot";
 import Ticket from "./Ticket";
 import Vehicle from "./Vehicle";
 
-// type Slots = {
-//   [key in SlotSize]: Slot[];
-// };
-
-// type ParkingRates = {
-//   [key in SlotSize]: ParkingRate;
-// };
-
 export class ParkingLotUtils {
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
     if (!ticket.exitTimestamp) return true;
@@ -95,9 +87,7 @@ export class ParkingLot {
     if (!ticket) throw Error("No record found.");
 
     const exitTimeStamp = customTimeStemp || Date.now();
-    console.log(this.getParkingRate(ticket.slot.slotSize));
     const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
-    console.log(exitTimeStamp - ticket.entryTimestamp, toPay);
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
 
@@ -115,7 +105,6 @@ export class ParkingLot {
   getParkingSlot(size: VehicleType, entryPoint: EntryPoint) {
     const occupiedSlots = this.getActiveTickets().map((ticket) => ticket.slot);
     const validSlots = this.slots.filter((slot: Slot) => slot.slotSize >= size && !occupiedSlots.includes(slot));
-
     return validSlots.sort((a: Slot, b: Slot) => a.getDistance(entryPoint) - b.getDistance(entryPoint))[0];
   }
 
