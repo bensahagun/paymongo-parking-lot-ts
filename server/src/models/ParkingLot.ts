@@ -3,6 +3,9 @@ import ParkingRate from "./ParkingRate";
 import Slot from "./Slot";
 import Ticket from "./Ticket";
 import Vehicle from "./Vehicle";
+
+const msInHour = process.env.msInHour ? Number(process.env.msInHour) : 3600000;
+
 export class ParkingLotUtils {
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
     if (!ticket.exitTimestamp) return true;
@@ -11,7 +14,6 @@ export class ParkingLotUtils {
   }
 
   static getHoursDiff(startDate: number, endDate: number) {
-    const msInHour = 1000 * 60 * 60;
     return Math.ceil(Math.abs(endDate - startDate) / msInHour);
   }
 
@@ -38,17 +40,6 @@ export class ParkingLot {
   ticketHoursValid: number;
 
   constructor(slots?: Slot[], rates?: ParkingRate[], ticketHoursValid?: number) {
-    // this.slots = slots.reduce((acc, slot) => {
-    //   const key = slot.slotSize;
-    //   const currGroup = acc[key] ?? [];
-
-    //   return { ...acc, [key]: [...currGroup, slot] };
-    // }, {} as Slots);
-
-    // this.parkingRates = rates.reduce((acc, rate) => {
-    //   const key = rate.slotSize;
-    //   return { ...acc, [key]: rate };
-    // }, {} as ParkingRates);
     this.slots = slots || [];
     this.parkingRates = rates || [];
     this.tickets = [];

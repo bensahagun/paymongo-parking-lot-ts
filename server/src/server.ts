@@ -1,9 +1,11 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 import express from "express";
 import park from "./routes/park";
 import unpark from "./routes/unpark";
 import map from "./routes/map";
 import cors from "cors";
-
 const app = express();
 
 app.use(express.json());

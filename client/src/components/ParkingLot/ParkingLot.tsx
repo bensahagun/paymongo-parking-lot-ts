@@ -24,7 +24,7 @@ const ParkingLot = () => {
     // if (isNaN(Number(hoursStay))) return;
 
     unparkVehicle(ticket, undefined).then((charge) => {
-      alert(charge);
+      alert("Charge: " + charge);
       fetchParkingMap();
     });
   };

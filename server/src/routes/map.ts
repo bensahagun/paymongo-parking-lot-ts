@@ -9,7 +9,6 @@ const router = express.Router();
 router.get("/", (_, res) => {
   const slotsWithTicket = parkingLot.slots.map((slot) => {
     const ticket = parkingLot.tickets.find((ticket) => ticket.slot.slotNum == slot.slotNum);
-    console.log(ticket?.slot);
 
     if (ticket && ParkingLotUtils.validateTicket(ticket, parkingLot.ticketHoursValid)) {
       return { ...slot, ticket };

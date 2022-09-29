@@ -13,7 +13,7 @@ export const parkVehicle = async (plateNum: string, vehicleType: number, entranc
       entrance,
     })
     .then((res) => {
-      alert(res.data?.error || "Successfully parked.");
+      return res.data?.error || "Successfully parked.";
     });
 };
 
@@ -21,8 +21,7 @@ export const unparkVehicle = async (ticket: Ticket, hoursStay?: number) => {
   const customTimestamp = hoursStay ? ticket.entryTimestamp + hoursToMS(hoursStay) : null;
   return axios.post(baseURL + "/unpark", { vehicle: ticket.vehicle, customTimestamp }).then((res) => {
     if (res.data?.error) {
-      alert(res.data.error);
-      return;
+      return res.data.error;
     }
     return res.data.charge;
   });

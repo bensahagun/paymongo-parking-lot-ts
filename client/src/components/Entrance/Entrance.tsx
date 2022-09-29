@@ -7,13 +7,13 @@ const Entrance = () => {
   const [entrance, setEntrance] = useState(-1);
   const [plateNum, setPlateNum] = useState("");
 
-  const handleClick = async () => {
+  const handleClick = () => {
     if (!plateNum || vehicleType < 0 || entrance < 0) {
       alert("All fields are required.");
       return false;
     }
 
-    await parkVehicle(plateNum, vehicleType, entrance);
+    parkVehicle(plateNum, vehicleType, entrance).then((msg) => alert(msg));
   };
 
   const generateRandomPlateNum = () => {
