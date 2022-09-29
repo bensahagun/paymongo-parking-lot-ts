@@ -25,21 +25,21 @@ async function main() {
     console.log(parkingLot.unparkVehicle(zkx), ticket);
     await delay(1500);
 
-    const avi = new Vehicle("ZSP 382", VehicleType.M);
-    let aviticket = parkingLot.parkVehicle(avi, EntryPoint.B);
-    ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
-    console.log(ticket, aviticket);
-    await delay(1000);
+    // const avi = new Vehicle("ZSP 382", VehicleType.M);
+    // let aviticket = parkingLot.parkVehicle(avi, EntryPoint.B);
+    // ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
+    // console.log(ticket, aviticket);
+    // await delay(1000);
 
-    ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
-    console.log(ticket);
-    await delay(5000);
-    console.log(parkingLot.unparkVehicle(zkx), ticket);
-    await delay(700);
-    ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
-    console.log(ticket);
-    await delay(23100);
-    console.log(parkingLot.unparkVehicle(zkx), ticket);
+    // ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
+    // console.log(ticket);
+    // await delay(5000);
+    // console.log(parkingLot.unparkVehicle(zkx), ticket);
+    // await delay(700);
+    // ticket = parkingLot.parkVehicle(zkx, EntryPoint.B);
+    // console.log(ticket);
+    // await delay(23100);
+    // console.log(parkingLot.unparkVehicle(zkx), ticket);
 
     // await delay(3500);
 

@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
 import cx from "classnames";
+import { useEffect, useState } from "react";
 import { getParkingMap, unparkVehicle } from "../../services/api";
-import { ParkingMap } from "../../types/parkingMap";
 import { SlotSize } from "../../types/enums";
-import { Spinner } from "./Spinner";
+import { ParkingMap } from "../../types/parkingMap";
 import { Ticket } from "../../types/ticket";
+import { Spinner } from "./Spinner";
 
 const ParkingLot = () => {
   const [parkingMap, setParkingMap] = useState<ParkingMap | null>(null);

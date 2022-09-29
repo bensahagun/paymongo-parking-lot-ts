@@ -1,6 +1,5 @@
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 dotenv.config();
-
 import express from "express";
 import park from "./routes/park";
 import unpark from "./routes/unpark";

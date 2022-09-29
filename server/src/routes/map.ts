@@ -1,7 +1,7 @@
 import express from "express";
 import { groupBy } from "lodash";
 
-import parkingLot from "../context";
+import parkingLot from "../parkingLot";
 import { ParkingLotUtils } from "../models/ParkingLot";
 
 const router = express.Router();

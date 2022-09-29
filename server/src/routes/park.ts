@@ -1,5 +1,5 @@
 import express from "express";
-import parkingLot from "../context";
+import parkingLot from "../parkingLot";
 import Vehicle from "../models/Vehicle";
 
 const router = express.Router();
