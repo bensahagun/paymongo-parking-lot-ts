@@ -1,5 +1,4 @@
-import React from "react";
-import classNames from "classnames";
+import cx from "classnames";
 
 interface Props {
   activeTab: number;
@@ -18,7 +17,7 @@ const Tabs = ({ activeTab, setActiveTab }: Props) => {
         >
           <li className='mr-2' role='presentation'>
             <button
-              className={classNames(
+              className={cx(
                 "text-xl inline-block p-4 rounded-t-lg border-b-2",
                 activeTab === 0
                   ? "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
@@ -37,7 +36,7 @@ const Tabs = ({ activeTab, setActiveTab }: Props) => {
           </li>
           <li className='mr-2' role='presentation'>
             <button
-              className={classNames(
+              className={cx(
                 "text-xl inline-block p-4 rounded-t-lg border-b-2",
                 activeTab === 1
                   ? "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"

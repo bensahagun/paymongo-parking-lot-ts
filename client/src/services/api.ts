@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Ticket } from "../types/ticket";
-import { Vehicle } from "../types/vehicle";
 import { hoursToMS } from "../utils/hoursToMS";
 
 const baseURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Entrance from "./components/Entrance/Entrance";
 import ParkingLot from "./components/ParkingLot/ParkingLot";
 import Tabs from "./components/Tabs/Tabs";
