@@ -20,13 +20,14 @@ export class ParkingLotUtils {
   }
 
   static getHoursDiff(startDate: number, endDate: number) {
-    // const msInHour = 1000 * 60 * 60;
-    const msInHour = 1000 * 1;
+    const msInHour = 1000 * 60 * 60;
+    // const msInHour = 1000 * 1;
     return Math.ceil(Math.abs(endDate - startDate) / msInHour);
   }
 
   static calculateFees(ticket: Ticket, rate: ParkingRate, exitTimeStamp: number) {
     const totalHours = ParkingLotUtils.getHoursDiff(ticket.entryTimestamp, exitTimeStamp);
+    console.log(totalHours);
     const dayInHours = 24;
 
     if (totalHours <= rate.flatRateHours) return rate.flatRate - ticket.paidAmount;
@@ -47,7 +48,7 @@ export class ParkingLot {
   parkingRates: ParkingRate[];
   ticketHoursValid: number;
 
-  constructor(slots: Slot[], rates: ParkingRate[], ticketHoursValid = 1) {
+  constructor(slots?: Slot[], rates?: ParkingRate[], ticketHoursValid?: number) {
     // this.slots = slots.reduce((acc, slot) => {
     //   const key = slot.slotSize;
     //   const currGroup = acc[key] ?? [];
@@ -59,10 +60,10 @@ export class ParkingLot {
     //   const key = rate.slotSize;
     //   return { ...acc, [key]: rate };
     // }, {} as ParkingRates);
-    this.slots = slots;
-    this.parkingRates = rates;
+    this.slots = slots || [];
+    this.parkingRates = rates || [];
     this.tickets = [];
-    this.ticketHoursValid = ticketHoursValid;
+    this.ticketHoursValid = ticketHoursValid || 1;
   }
 
   addSlot(slot: Slot) {
@@ -90,16 +91,20 @@ export class ParkingLot {
     return newTicket;
   }
 
-  unparkVehicle(plateNum: string) {
-    const ticket = this.getTicket(plateNum);
+  unparkVehicle(vehicle: Vehicle) {
+    const ticket = this.getTicket(vehicle.plateNum);
     if (!ticket) throw Error("No record found.");
 
     const exitTimeStamp = Date.now();
-    const toPay = ParkingLotUtils.calculateFees(ticket, this.parkingRates[ticket.slot.slotSize], exitTimeStamp);
+    const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
 
-    return toPay;
+    return ticket;
+  }
+
+  getParkingRate(slotSize: SlotSize) {
+    return this.parkingRates[slotSize];
   }
 
   getTicket(plateNum: string) {

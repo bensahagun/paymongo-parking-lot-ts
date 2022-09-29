@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "ts-node src/test.ts",
-    "test": "ENV_FILE=./.env.test jest"
+    "test": "jest --collectCoverage --verbose --watchAll --silent=false"
   },
   "devDependencies": {
     "@types/express": "^4.17.14",

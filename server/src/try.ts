@@ -9,7 +9,7 @@ import slotsJSON from "./seeds/slots.json";
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 async function main() {
-  const slots = slotsJSON.map((s) => new Slot(s.slotNumber, s.distances, s.slotSize));
+  const slots = slotsJSON.map((s) => new Slot(s.slotNum, s.distances, s.slotSize));
   const rates = parkingRatesJSON.map((r) => new ParkingRate(r.slotSize, r.hourlyRate, r.dailyRate, r.flatRate));
   const parkingLot = new ParkingLot(slots, rates);
 

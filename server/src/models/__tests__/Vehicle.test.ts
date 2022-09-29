@@ -1,7 +1,7 @@
 import { VehicleType } from "../enums";
 import Vehicle from "../Vehicle";
 
-describe("Vehichle", () => {
+describe("Vehicle", () => {
   it("it should be initialized", () => {
     const vehicle = new Vehicle("ABC 123", 0);
     expect(vehicle).toBeInstanceOf(Vehicle);
