@@ -4,7 +4,7 @@ import Slot from "./Slot";
 import Ticket from "./Ticket";
 import Vehicle from "./Vehicle";
 
-const msInHour = process.env.msInHour ? Number(process.env.msInHour) : 3600000;
+const hourInMs = process.env.hourInMs ? Number(process.env.hourInMs) : 3600000;
 
 export class ParkingLotUtils {
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
@@ -14,7 +14,7 @@ export class ParkingLotUtils {
   }
 
   static getHoursDiff(startDate: number, endDate: number) {
-    return Math.ceil(Math.abs(endDate - startDate) / msInHour);
+    return Math.ceil(Math.abs(endDate - startDate) / hourInMs);
   }
 
   static calculateFees(ticket: Ticket, rate: ParkingRate, exitTimeStamp: number) {
