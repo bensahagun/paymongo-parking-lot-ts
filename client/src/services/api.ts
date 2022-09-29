@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Ticket } from "../types/ticket";
-import { hoursToMS } from "../utils/hoursToMS";
 
 const baseURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
@@ -16,9 +15,8 @@ export const parkVehicle = async (plateNum: string, vehicleType: number, entranc
     });
 };
 
-export const unparkVehicle = async (ticket: Ticket, hoursStay?: number) => {
-  const customTimestamp = hoursStay ? ticket.entryTimestamp + hoursToMS(hoursStay) : null;
-  return axios.post(baseURL + "/unpark", { vehicle: ticket.vehicle, customTimestamp }).then((res) => {
+export const unparkVehicle = async (ticket: Ticket) => {
+  return axios.post(baseURL + "/unpark", { vehicle: ticket.vehicle }).then((res) => {
     if (res.data?.error) {
       return res.data.error;
     }

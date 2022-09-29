@@ -20,10 +20,7 @@ const ParkingLot = () => {
   const unParkVehicle = (ticket: Ticket) => {
     if (!ticket || ticket.exitTimestamp) return;
 
-    // const hoursStay = prompt("Time stayed:");
-    // if (isNaN(Number(hoursStay))) return;
-
-    unparkVehicle(ticket, undefined).then((charge) => {
+    unparkVehicle(ticket).then((charge) => {
       alert("Charge: " + charge);
       fetchParkingMap();
     });

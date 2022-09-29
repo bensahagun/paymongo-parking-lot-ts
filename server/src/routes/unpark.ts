@@ -6,11 +6,10 @@ const router = express.Router();
 
 type Params = {
   vehicle: Vehicle;
-  customTimestamp: number;
 };
 
 router.post("/", (req, res) => {
-  const { vehicle, customTimestamp } = <Params>req.body;
+  const { vehicle } = <Params>req.body;
 
   if (!vehicle) {
     res.json({ error: "Fields vehicle is required." });
@@ -18,7 +17,7 @@ router.post("/", (req, res) => {
   }
 
   try {
-    const charge = parkingLot.unparkVehicle(new Vehicle(vehicle.plateNum, vehicle.vehicleType), customTimestamp);
+    const charge = parkingLot.unparkVehicle(new Vehicle(vehicle.plateNum, vehicle.vehicleType));
     res.json({ charge });
   } catch (e) {
     res.json({ error: (e as Error).message });
