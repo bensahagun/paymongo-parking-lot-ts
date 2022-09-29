@@ -27,7 +27,6 @@ export class ParkingLotUtils {
 
   static calculateFees(ticket: Ticket, rate: ParkingRate, exitTimeStamp: number) {
     const totalHours = ParkingLotUtils.getHoursDiff(ticket.entryTimestamp, exitTimeStamp);
-    console.log(totalHours);
     const dayInHours = 24;
 
     if (totalHours <= rate.flatRateHours) return rate.flatRate - ticket.paidAmount;
@@ -91,11 +90,11 @@ export class ParkingLot {
     return newTicket;
   }
 
-  unparkVehicle(vehicle: Vehicle) {
+  unparkVehicle(vehicle: Vehicle, customTimeStemp?: number) {
     const ticket = this.getTicket(vehicle.plateNum);
     if (!ticket) throw Error("No record found.");
 
-    const exitTimeStamp = Date.now();
+    const exitTimeStamp = customTimeStemp || Date.now();
     const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
@@ -114,6 +113,7 @@ export class ParkingLot {
   getParkingSlot(size: VehicleType, entryPoint: EntryPoint) {
     const occupiedSlots = this.getActiveTickets().map((ticket) => ticket.slot);
     const validSlots = this.slots.filter((slot: Slot) => slot.slotSize >= size && !occupiedSlots.includes(slot));
+
     return validSlots.sort((a: Slot, b: Slot) => a.getDistance(entryPoint) - b.getDistance(entryPoint))[0];
   }
 
