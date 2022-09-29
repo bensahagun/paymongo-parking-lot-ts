@@ -18,12 +18,8 @@ router.post("/", (req, res) => {
   }
 
   try {
-    const { ticket, charge } = parkingLot.unparkVehicle(
-      new Vehicle(vehicle.plateNum, vehicle.vehicleType),
-      customTimestamp
-    );
-
-    res.json({ ticket, charge });
+    const charge = parkingLot.unparkVehicle(new Vehicle(vehicle.plateNum, vehicle.vehicleType), customTimestamp);
+    res.json({ charge });
   } catch (e) {
     res.json({ error: (e as Error).message });
   }

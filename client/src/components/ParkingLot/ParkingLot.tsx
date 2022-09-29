@@ -9,7 +9,7 @@ import { Ticket } from "../../types/ticket";
 const ParkingLot = () => {
   const [parkingMap, setParkingMap] = useState<ParkingMap | null>(null);
 
-  const fetchParkingMap = async () => {
+  const fetchParkingMap = () => {
     return getParkingMap().then((data) => setParkingMap(data.map));
   };
 
@@ -20,10 +20,10 @@ const ParkingLot = () => {
   const unParkVehicle = (ticket: Ticket) => {
     if (!ticket || ticket.exitTimestamp) return;
 
-    const hoursStay = prompt("Time stayed:");
-    if (isNaN(Number(hoursStay))) return;
+    // const hoursStay = prompt("Time stayed:");
+    // if (isNaN(Number(hoursStay))) return;
 
-    unparkVehicle(ticket, Number(hoursStay)).then((charge) => {
+    unparkVehicle(ticket, undefined).then((charge) => {
       alert(charge);
       fetchParkingMap();
     });

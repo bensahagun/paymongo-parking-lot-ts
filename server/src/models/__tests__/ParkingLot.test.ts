@@ -154,13 +154,13 @@ describe("Parking with reentry after 1 hour", () => {
   it("should compute correct charges after 5.5 hours", () => {
     const hoursInMSStay = hoursToMS(5.5);
     setTimeout(() => {
-      const { charge } = parkingLot.unparkVehicle(vehicle);
+      const charge = parkingLot.unparkVehicle(vehicle);
       expect(charge).toBe(340); // uses slot #5 -> 40 + (100*3)
     }, hoursInMSStay);
     jest.advanceTimersByTime(hoursInMSStay);
   });
 
-  it("should receive new ticket after 1hr", () => {
+  it("should receive new ticket after 1.2hrs", () => {
     const hoursInMSStay = hoursToMS(1.2);
     setTimeout(() => {
       const ticket = parkingLot.parkVehicle(vehicle, EntryPoint.B);
@@ -187,7 +187,7 @@ describe("Parking over 24 hours", () => {
     const rate = parkingLot.getParkingRate(ticket1.slot.slotSize);
 
     setTimeout(() => {
-      const { charge } = parkingLot.unparkVehicle(vehicle1);
+      const charge = parkingLot.unparkVehicle(vehicle1);
       expect(charge).toBe(rate.dailyRate);
     }, hoursToMS(24));
     jest.advanceTimersByTime(hoursToMS(24));
@@ -199,7 +199,7 @@ describe("Parking over 24 hours", () => {
     const hoursInMSStay = hoursToMS(25);
 
     setTimeout(() => {
-      const { charge } = parkingLot.unparkVehicle(vehicle1);
+      const charge = parkingLot.unparkVehicle(vehicle1);
       expect(charge).toBe(rate.dailyRate + rate.hourlyRate);
     }, hoursInMSStay);
     jest.advanceTimersByTime(hoursInMSStay);
@@ -211,7 +211,7 @@ describe("Parking over 24 hours", () => {
     const hoursInMSStay = hoursToMS(48);
 
     setTimeout(() => {
-      const { charge } = parkingLot.unparkVehicle(vehicle2);
+      const charge = parkingLot.unparkVehicle(vehicle2);
       expect(charge).toBe(rate.dailyRate * 2);
     }, hoursInMSStay);
     jest.advanceTimersByTime(hoursInMSStay);
@@ -252,9 +252,8 @@ describe("Parking with 2 cars and reentry", () => {
 
   test("should receive a valid ticket when unparking", () => {
     setTimeout(() => {
-      const { ticket: exitTicket } = parkingLot.unparkVehicle(vehicle1);
-      expect(exitTicket).toBe(ticket1);
-      expect(exitTicket.exitTimestamp).toBeGreaterThan(exitTicket.entryTimestamp);
+      const charge = parkingLot.unparkVehicle(vehicle1);
+      expect(charge).toBeGreaterThan(0);
     }, hoursToMS(1));
 
     jest.advanceTimersByTime(hoursToMS(1));
@@ -271,5 +270,48 @@ describe("Parking with 2 cars and reentry", () => {
       expect(newTicket).toBe(ticket1);
     }, hoursToMS(1));
     jest.advanceTimersByTime(hoursToMS(1));
+  });
+});
+
+describe("Parking and reentering inside flatRate treshold", () => {
+  beforeAll(initParkingLot);
+  const vehicle1 = new Vehicle("ZKX 571", VehicleType.L);
+  let ticket: Ticket;
+
+  it("should give valid ticket", () => {
+    ticket = parkingLot.parkVehicle(vehicle1, EntryPoint.A);
+    expect(ticket).toBeInstanceOf(Ticket);
+    expect(ticket.exitTimestamp).toBeFalsy();
+    expect(ticket.paidAmount).toBe(0);
+  });
+
+  it("should give flat rate for leaving after 2hrs", () => {
+    const hoursStay = hoursToMS(2);
+    setTimeout(() => {
+      const charge = parkingLot.unparkVehicle(vehicle1);
+      const rate = parkingLot.getParkingRate(ticket.slot.slotSize);
+      expect(charge).toBe(rate.flatRate);
+    }, hoursStay);
+    jest.advanceTimersByTime(hoursStay);
+  });
+
+  it("should give same ticket when after 30mins", () => {
+    const delay = hoursToMS(0.5);
+    setTimeout(() => {
+      const reenterTicket = parkingLot.parkVehicle(vehicle1, EntryPoint.A);
+      const rate = parkingLot.getParkingRate(ticket.slot.slotSize);
+      expect(reenterTicket).toBe(ticket);
+      expect(reenterTicket.paidAmount).toBe(rate.flatRate);
+    }, delay);
+    jest.advanceTimersByTime(delay);
+  });
+
+  it("should charge 0 for leaving before 3hrs", () => {
+    const hoursStay = hoursToMS(0.25);
+    setTimeout(() => {
+      const charge = parkingLot.unparkVehicle(vehicle1);
+      expect(charge).toBe(0);
+    }, hoursStay);
+    jest.advanceTimersByTime(hoursStay);
   });
 });
