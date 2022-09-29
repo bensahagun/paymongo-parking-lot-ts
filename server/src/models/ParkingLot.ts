@@ -4,13 +4,13 @@ import Slot from "./Slot";
 import Ticket from "./Ticket";
 import Vehicle from "./Vehicle";
 
-type Slots = {
-  [key in SlotSize]: Slot[];
-};
+// type Slots = {
+//   [key in SlotSize]: Slot[];
+// };
 
-type ParkingRates = {
-  [key in SlotSize]: ParkingRate;
-};
+// type ParkingRates = {
+//   [key in SlotSize]: ParkingRate;
+// };
 
 export class ParkingLotUtils {
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
@@ -43,29 +43,30 @@ export class ParkingLotUtils {
 
 export class ParkingLot {
   tickets: Ticket[];
-  slots: Slots;
-  parkingRates: ParkingRates;
+  slots: Slot[];
+  parkingRates: ParkingRate[];
   ticketHoursValid: number;
 
   constructor(slots: Slot[], rates: ParkingRate[], ticketHoursValid = 1) {
-    this.slots = slots.reduce((acc, slot) => {
-      const key = slot.slotSize;
-      const currGroup = acc[key] ?? [];
+    // this.slots = slots.reduce((acc, slot) => {
+    //   const key = slot.slotSize;
+    //   const currGroup = acc[key] ?? [];
 
-      return { ...acc, [key]: [...currGroup, slot] };
-    }, {} as Slots);
+    //   return { ...acc, [key]: [...currGroup, slot] };
+    // }, {} as Slots);
 
-    this.parkingRates = rates.reduce((acc, rate) => {
-      const key = rate.slotSize;
-      return { ...acc, [key]: rate };
-    }, {} as ParkingRates);
-
+    // this.parkingRates = rates.reduce((acc, rate) => {
+    //   const key = rate.slotSize;
+    //   return { ...acc, [key]: rate };
+    // }, {} as ParkingRates);
+    this.slots = slots;
+    this.parkingRates = rates;
     this.tickets = [];
     this.ticketHoursValid = ticketHoursValid;
   }
 
   addSlot(slot: Slot) {
-    this.slots[slot.slotSize].push(slot);
+    this.slots.push(slot);
   }
 
   addRate(rate: ParkingRate) {
@@ -107,10 +108,8 @@ export class ParkingLot {
 
   getParkingSlot(size: VehicleType, entryPoint: EntryPoint) {
     const occupiedSlots = this.getActiveTickets().map((ticket) => ticket.slot);
-    const validSlots = Object.values(this.slots)
-      .flat()
-      .filter((slot: Slot) => slot.slotSize >= size && !occupiedSlots.includes(slot));
-    return validSlots.sort((a: Slot, b: Slot) => a.distances[entryPoint] - b.distances[entryPoint])[0];
+    const validSlots = this.slots.filter((slot: Slot) => slot.slotSize >= size && !occupiedSlots.includes(slot));
+    return validSlots.sort((a: Slot, b: Slot) => a.getDistance(entryPoint) - b.getDistance(entryPoint))[0];
   }
 
   getActiveTickets() {

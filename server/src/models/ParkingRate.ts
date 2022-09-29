@@ -7,7 +7,7 @@ export default class ParkingRate {
   flatRate: number;
   flatRateHours: number;
 
-  constructor(slotSize: SlotSize, hourlyRate: number, dailyRate: number, flatRate = 40, flatRateHours = 3) {
+  constructor(slotSize: SlotSize, hourlyRate: number, dailyRate = 5000, flatRate = 40, flatRateHours = 3) {
     this.slotSize = slotSize;
     this.hourlyRate = hourlyRate;
     this.dailyRate = dailyRate;
