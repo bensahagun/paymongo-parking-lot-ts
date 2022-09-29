@@ -69,6 +69,10 @@ export class ParkingLot {
   parkVehicle(vehicle: Vehicle, entryPoint: EntryPoint) {
     const ticket = this.getTicket(vehicle.plateNum);
 
+    if (ticket && !ticket.exitTimestamp) {
+      throw Error("You are already parked");
+    }
+
     if (ticket && ParkingLotUtils.validateTicket(ticket, this.ticketHoursValid)) {
       ticket.exitTimestamp = undefined;
       return ticket;

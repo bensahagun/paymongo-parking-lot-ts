@@ -21,7 +21,7 @@ const Entrance = () => {
         entrance: entrance,
       })
       .then((res) => {
-        console.log(res.data);
+        alert(res.data?.error || "Successfully parked.");
       });
   };
 
