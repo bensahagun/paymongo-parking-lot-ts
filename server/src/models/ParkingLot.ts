@@ -70,7 +70,7 @@ export class ParkingLot {
   }
 
   addRate(rate: ParkingRate) {
-    if (rate.slotSize in this.parkingRates) return false;
+    if (rate.slotSize in this.parkingRates) throw new Error("Slot size has existing rate.");
     this.parkingRates[rate.slotSize] = rate;
   }
 
@@ -95,7 +95,9 @@ export class ParkingLot {
     if (!ticket) throw Error("No record found.");
 
     const exitTimeStamp = customTimeStemp || Date.now();
+    console.log(this.getParkingRate(ticket.slot.slotSize));
     const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
+    console.log(exitTimeStamp - ticket.entryTimestamp, toPay);
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
 
@@ -119,18 +121,5 @@ export class ParkingLot {
 
   getActiveTickets() {
     return this.tickets.filter(ParkingLotUtils.validateTicket);
-  }
-
-  getMap() {
-    return Object.values(this.slots)
-      .flat()
-      .map((slot) => {
-        const ticket = this.tickets.find((ticket) => ticket.slot == slot);
-
-        if (ticket && ParkingLotUtils.validateTicket(ticket, this.ticketHoursValid)) {
-          return { ...slot, occupantTicket: ticket };
-        }
-        return slot;
-      });
   }
 }

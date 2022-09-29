@@ -1,4 +1,4 @@
-import { EntryPoint, VehicleType } from "../enums";
+import { EntryPoint, SlotSize, VehicleType } from "../enums";
 import { ParkingLot } from "../ParkingLot";
 import ParkingRate from "../ParkingRate";
 import Slot from "../Slot";
@@ -78,6 +78,12 @@ describe("Parking lot init", () => {
   test(`Parking lot should have ${parkingRatesJSON.length} slots`, () => {
     expect(parkingLot.parkingRates.length).toBe(parkingRatesJSON.length);
   });
+
+  test("should not accept another rate for same SIZE", () => {
+    expect(() => {
+      parkingLot.addRate(new ParkingRate(SlotSize.SP, 50));
+    }).toThrowError();
+  });
 });
 
 describe("Parking SMALL cars to nearest spot", () => {
@@ -131,6 +137,44 @@ describe("Parking SMALL, MEDIUM and LARGE cars to nearest spot", () => {
 
   it("parking lot should have 2 active ticket", () => {
     expect(parkingLot.getActiveTickets().length).toBe(2);
+  });
+});
+
+describe("Parking with reentry after 1 hour", () => {
+  beforeAll(initParkingLot);
+  const vehicle = new Vehicle("MED 342", VehicleType.M);
+  let ticket: Ticket;
+
+  it("should receive a valid ticket", () => {
+    ticket = parkingLot.parkVehicle(vehicle, EntryPoint.C);
+    expect(ticket).toBeInstanceOf(Ticket);
+    expect(ticket.paidAmount).toBeFalsy();
+  });
+
+  it("should compute correct charges after 5.5 hours", () => {
+    const hoursInMSStay = hoursToMS(5.5);
+    setTimeout(() => {
+      const exitTicket = parkingLot.unparkVehicle(vehicle);
+      expect(exitTicket).toBe(ticket);
+      expect(exitTicket.paidAmount).toBe(340); // uses slot #5 -> 40 + (100*3)
+    }, hoursInMSStay);
+    jest.advanceTimersByTime(hoursInMSStay);
+  });
+
+  it("should receive new ticket after 1hr", () => {
+    const hoursInMSStay = hoursToMS(1.2);
+    setTimeout(() => {
+      const ticket = parkingLot.parkVehicle(vehicle, EntryPoint.B);
+      expect(ticket).not.toBe(Ticket);
+      expect(ticket.paidAmount).toBeFalsy();
+    }, hoursInMSStay);
+    jest.advanceTimersByTime(hoursInMSStay);
+  });
+
+  it("should not unpark with no valid ticket", () => {
+    expect(() => {
+      parkingLot.unparkVehicle(new Vehicle("NOT 123", VehicleType.S));
+    }).toThrowError();
   });
 });
 
