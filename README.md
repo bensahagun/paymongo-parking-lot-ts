@@ -11,3 +11,6 @@
 1. Inside `client` directory, run `yarn install` to install dependencies.
 2. Inside `client` directory, rename `.env.example` to `.env`
 3. Inside `client` directory, run `yarn start`
+
+## To run tests
+Inside `server` directory, run `yarn test`
