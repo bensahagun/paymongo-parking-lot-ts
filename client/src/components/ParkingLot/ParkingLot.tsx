@@ -44,9 +44,9 @@ const ParkingLot = () => {
                 key={s.slotNum}
                 onClick={() => unParkVehicle(s.ticket)}
                 className={cx(
-                  "relative w-1/12 rounded mb-8 border-gray-300 dark:border-gray-700 border-dashed border-2 h-24 items-center flex justify-center flex-col",
-                  s.ticket ? "cursor-pointer dark:hover:bg-gray-600" : "",
-                  s.ticket?.exitTimestamp ? "border-red-700 dark:border-red-700" : ""
+                  "relative w-1/12 rounded mb-8  border-gray-700 border-dashed border-2 h-24 items-center flex justify-center flex-col",
+                  s.ticket ? "cursor-pointer hover:bg-gray-600" : "",
+                  s.ticket?.exitTimestamp ? "cursor-default border-red-700" : ""
                 )}
               >
                 <span className={cx("capitalize font-bold text-xl", s.ticket ? " text-white " : "text-green-400")}>

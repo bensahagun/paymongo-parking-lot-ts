@@ -8,7 +8,7 @@ interface Props {
 const Tabs = ({ activeTab, setActiveTab }: Props) => {
   return (
     <>
-      <div className='mb-4 border-b border-gray-200 dark:border-gray-700'>
+      <div className='mb-4 border-b border-gray-700'>
         <ul
           className='flex flex-wrap -mb-px text-sm font-medium text-center'
           id='myTab'
@@ -20,8 +20,8 @@ const Tabs = ({ activeTab, setActiveTab }: Props) => {
               className={cx(
                 "text-xl inline-block p-4 rounded-t-lg border-b-2",
                 activeTab === 0
-                  ? "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
-                  : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
+                  ? "  hover:text-blue-500  border-blue-500 text-blue-500"
+                  : " hover:border-gray-300 hover:text-gray-300 border-transparent  text-gray-400  border-gray-700"
               )}
               id='park-tab'
               data-tabs-target='#park'
@@ -39,8 +39,8 @@ const Tabs = ({ activeTab, setActiveTab }: Props) => {
               className={cx(
                 "text-xl inline-block p-4 rounded-t-lg border-b-2",
                 activeTab === 1
-                  ? "text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
-                  : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
+                  ? "  hover:text-blue-500  border-blue-500 text-blue-500"
+                  : " hover:border-gray-300 hover:text-gray-300 border-transparent  text-gray-400  border-gray-700"
               )}
               id='unpark-tab'
               data-tabs-target='#unpark'
