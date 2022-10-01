@@ -11,7 +11,7 @@ export const parkVehicle = async (plateNum: string, vehicleType: number, entranc
       entrance,
     })
     .then((res) => {
-      return res.data?.error || "Successfully parked.";
+      return res.data?.error || `Park at slot #${res.data.slotNum}`;
     });
 };
 

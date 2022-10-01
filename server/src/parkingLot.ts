@@ -10,4 +10,6 @@ const slots = slotsJSON
 const rates = parkingRatesJSON.map((r) => new ParkingRate(r.slotSize, r.hourlyRate, r.dailyRate, r.flatRate));
 const parkingLot = new ParkingLot(slots, rates);
 
+// or use parkingLot.addRate, parkingLot.addSlot
+
 export default parkingLot;

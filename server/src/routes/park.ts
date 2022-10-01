@@ -19,8 +19,7 @@ router.post("/", (req, res) => {
   }
   try {
     const ticket = parkingLot.parkVehicle(new Vehicle(plateNum, vehicleType), entrance);
-
-    res.json({ ticket });
+    res.json({ slotNum: ticket.slot.slotNum });
   } catch (e) {
     res.json({ error: (e as Error).message });
   }
