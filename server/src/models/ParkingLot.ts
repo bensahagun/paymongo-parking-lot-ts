@@ -8,7 +8,7 @@ const hourInMs = process.env.hourInMs ? Number(process.env.hourInMs) : 3600000;
 
 export class ParkingLotUtils {
   static getHoursDiff(startDate: number, endDate: number) {
-    return Math.ceil(Math.abs(endDate - startDate) / hourInMs);
+    return Math.ceil((endDate - startDate) / hourInMs);
   }
 
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
@@ -59,7 +59,7 @@ export class ParkingLot {
     const ticket = this.getTicket(vehicle.plateNum);
 
     if (ticket && !ticket.exitTimestamp) {
-      throw Error("You are already parked");
+      throw new Error("You are already parked");
     }
 
     if (ticket && ParkingLotUtils.validateTicket(ticket, this.ticketHoursValid)) {
@@ -68,7 +68,7 @@ export class ParkingLot {
     }
 
     const slot = this.getParkingSlot(vehicle.vehicleType, entryPoint);
-    if (!slot) throw Error("No available slot");
+    if (!slot) throw new Error("No available slot");
 
     const newTicket = new Ticket(vehicle, slot);
     this.tickets.unshift(newTicket);
@@ -77,7 +77,7 @@ export class ParkingLot {
 
   unparkVehicle(vehicle: Vehicle) {
     const ticket = this.getTicket(vehicle.plateNum);
-    if (!ticket) throw Error("No record found.");
+    if (!ticket) throw new Error("No record found.");
 
     const exitTimeStamp = Date.now();
     const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
