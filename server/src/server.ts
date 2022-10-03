@@ -5,8 +5,8 @@ import park from "./routes/park";
 import unpark from "./routes/unpark";
 import map from "./routes/map";
 import cors from "cors";
-const app = express();
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/park", park);

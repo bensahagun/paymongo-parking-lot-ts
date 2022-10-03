@@ -7,14 +7,14 @@ import Vehicle from "./Vehicle";
 const hourInMs = process.env.hourInMs ? Number(process.env.hourInMs) : 3600000;
 
 export class ParkingLotUtils {
+  static getHoursDiff(startDate: number, endDate: number) {
+    return Math.ceil(Math.abs(endDate - startDate) / hourInMs);
+  }
+
   static validateTicket(ticket: Ticket, ticketHoursValid: number) {
     if (!ticket.exitTimestamp) return true;
     if (ParkingLotUtils.getHoursDiff(ticket.exitTimestamp, Date.now()) <= ticketHoursValid) return true;
     return false;
-  }
-
-  static getHoursDiff(startDate: number, endDate: number) {
-    return Math.ceil(Math.abs(endDate - startDate) / hourInMs);
   }
 
   static calculateFees(ticket: Ticket, rate: ParkingRate, exitTimeStamp: number) {
@@ -92,12 +92,12 @@ export class ParkingLot {
   }
 
   getTicket(plateNum: string) {
-    return this.tickets.find((ticket) => ticket.vehicle.plateNum === plateNum) || false;
+    return this.tickets.find((ticket) => ticket.vehicle.plateNum === plateNum);
   }
 
-  getParkingSlot(size: VehicleType, entryPoint: EntryPoint) {
+  getParkingSlot(vehicleType: VehicleType, entryPoint: EntryPoint) {
     const occupiedSlots = this.getActiveTickets().map((ticket) => ticket.slot);
-    const validSlots = this.slots.filter((slot: Slot) => slot.slotSize >= size && !occupiedSlots.includes(slot));
+    const validSlots = this.slots.filter((slot: Slot) => slot.slotSize >= vehicleType && !occupiedSlots.includes(slot));
     return validSlots.sort((a: Slot, b: Slot) => a.getDistance(entryPoint) - b.getDistance(entryPoint))[0];
   }
 

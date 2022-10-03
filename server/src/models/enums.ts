@@ -1,7 +1,7 @@
 export enum EntryPoint {
-  "A" = 0,
-  "B" = 1,
-  "C" = 2,
+  "A",
+  "B",
+  "C",
 }
 
 export enum VehicleType {
