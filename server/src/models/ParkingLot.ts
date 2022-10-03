@@ -75,11 +75,11 @@ export class ParkingLot {
     return newTicket;
   }
 
-  unparkVehicle(vehicle: Vehicle, customTimeStemp?: number) {
+  unparkVehicle(vehicle: Vehicle) {
     const ticket = this.getTicket(vehicle.plateNum);
     if (!ticket) throw Error("No record found.");
 
-    const exitTimeStamp = customTimeStemp || Date.now();
+    const exitTimeStamp = Date.now();
     const toPay = ParkingLotUtils.calculateFees(ticket, this.getParkingRate(ticket.slot.slotSize), exitTimeStamp);
     ticket.paidAmount += toPay;
     ticket.exitTimestamp = exitTimeStamp;
