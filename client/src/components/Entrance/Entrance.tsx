@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 import { parkVehicle } from "../../services/api";
 
@@ -6,6 +6,17 @@ const Entrance = () => {
   const [vehicleType, setVehicleType] = useState(-1);
   const [entrance, setEntrance] = useState(-1);
   const [plateNum, setPlateNum] = useState("");
+  const [clock, setClock] = useState(new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setClock(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   const handleClick = () => {
     if (!plateNum || vehicleType < 0 || entrance < 0) {
@@ -58,7 +69,6 @@ const Entrance = () => {
             <option value={2}>Large</option>
           </select>
         </div>
-
         <div className='mb-6 relative'>
           <label className='block mb-2 text-xl font-medium  text-gray-400'>Entrance</label>
           <select
@@ -73,7 +83,6 @@ const Entrance = () => {
             <option value={2}>C</option>
           </select>
         </div>
-
         <div>
           <button
             type='button'
@@ -84,6 +93,7 @@ const Entrance = () => {
             Park!
           </button>
         </div>
+        <div className='text-white mt-2'>{clock.toLocaleString()}</div>
       </div>
     </>
   );
